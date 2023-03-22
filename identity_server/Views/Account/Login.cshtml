@@ -1,0 +1,24 @@
+﻿@model LoginViewModel
+<h1>Login</h1>
+<form asp-controller="Account" asp-action="Login" method="post" class="form">
+
+    <input type="hidden" asp-for="ReturnUrl" />
+    <div class="mb-3 col-md-3">
+        <label for="formGroupExampleInput" class="form-label">UserName</label>
+        <input asp-for="UserName" type="text" class="form-control" id="formGroupExampleInput" placeholder="User name">
+        <span asp-validation-for="UserName" class="error"></span>
+    </div>
+    <div class="mb-3 col-md-3">
+        <label for="formGroupExampleInput2" class="form-label">Password</label>
+        <input asp-for="Password" type="text" class="form-control" id="formGroupExampleInput2" placeholder="Password">
+        <span asp-validation-for="Password" class="error"></span>
+    </div>
+    <div class="block">
+        <button type="submit" class="btn btn-success" asp-action="Login">Sign In</button>
+    </div>
+
+    <div class="block">
+        @* <a asp-controller="Account" asp-action="Register"
+        asp-route-returnUrl="@Model.ReturnUrl" class="switch-button">Register</a>*@
+    </div>
+</form>
