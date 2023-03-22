@@ -1,30 +1,30 @@
 ﻿namespace cars_api.Models.ModelsDTO
 {
-    public class CarDTO
+    public class CarCrateDTO
     {
-        public Guid Id { get; set; }
         public string Name { get; set; } = null!;
+        public string InnerInfo { get; set; } = null!;
 
         public string? Description { get; set; }
 
         public DateTime ProductionYear { get; set; }
 
-        public static explicit operator CarDTO(Car car)
+        public static explicit operator CarCrateDTO(Car car)
         {
-            return new CarDTO
+            return new CarCrateDTO
             {
-                Id = car.Id,
                 Name = car.Name,
+                InnerInfo = car.InnerInfo,
                 Description = car.Description,
                 ProductionYear = car.ProductionYear
             };
         }
-        public static implicit operator Car(CarDTO car)
+        public static implicit operator Car(CarCrateDTO car)
         {
             return new Car
             {
-               Id = car.Id,
                 Name = car.Name,
+                InnerInfo = car.InnerInfo,
                 Description = car.Description,
                 ProductionYear = car.ProductionYear
             };

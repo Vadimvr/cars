@@ -31,7 +31,6 @@ namespace identity_server
             IS4.AddIS(builder.Services);
 
 
-
             builder.Services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
             var app = builder.Build();
@@ -62,7 +61,6 @@ namespace identity_server
                     name: "Default",
                     pattern: "{controller=Site}/{action=Index}/{id?}");
             });
-
 
             app.Run();
         }

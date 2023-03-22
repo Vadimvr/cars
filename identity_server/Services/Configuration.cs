@@ -4,7 +4,6 @@ using IdentityServer4.Models;
 using IdentityServer4.Test;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using static System.Net.WebRequestMethods;
 
 namespace identity_server.Services
 {
@@ -21,7 +20,6 @@ namespace identity_server.Services
               .AddProfileService<ProfileService>()
 
               .AddDeveloperSigningCredential();
-
         }
     }
 
@@ -35,7 +33,6 @@ namespace identity_server.Services
                     Password = "user",
                     Claims = new List<Claim>
                     {
-                         new Claim(ClaimTypes.DateOfBirth,"01.01.2002"),
                          new Claim(ClaimTypes.Role,"User")
                     }
                 },
@@ -45,28 +42,19 @@ namespace identity_server.Services
                     Password = "admin",
                     Claims = new List<Claim>
                     {
-                         new Claim(ClaimTypes.DateOfBirth,"01.01.2005"),
                          new Claim(ClaimTypes.Role,"Admin")
                     }
                 }
             };
 
-
-        public static IEnumerable<ApiResource> ApiResources => new List<ApiResource>()
-        {
-            new ApiResource("apiServer", "Web API", new []{ JwtClaimTypes.Name})
+        public static IEnumerable<ApiResource> ApiResources => 
+            new List<ApiResource>()
             {
-                Scopes = { "apiServer" },
-            },
-            new ApiResource("CarsAPI", "Cars Api Swagger", new []{ JwtClaimTypes.Name})
-            {
-                Scopes = { "CarsAPI" },
-                
-            }
-
-
+                new ApiResource("CarsAPI", "Cars Api + Swagger", new []{ JwtClaimTypes.Name})
+                {
+                    Scopes = { "CarsAPI" },
+                }
             };
-
 
 
         public static IEnumerable<IdentityResource> IdentityResources =>
@@ -80,10 +68,7 @@ namespace identity_server.Services
         public static IEnumerable<ApiScope> ApiScopes =>
             new List<ApiScope>
             {
-                new ApiScope("apiServer"),
                 new ApiScope("CarsAPI"),
-                //    new ApiScope(name: "mvc.read", displayName: "Read Access to mvc"),
-                //    new ApiScope(name: "postman.read", displayName: "Read Access to postman"),
             };
 
         public static IEnumerable<Client> Clients =>
@@ -102,45 +87,8 @@ namespace identity_server.Services
                         IdentityServerConstants.StandardScopes.Profile,
                         "CarsAPI",
                     },
-                    AllowedCorsOrigins = { "https://localhost:5050" }
-                    //RedirectUris =  {"https://localhost:5010/signin-oidc"},
-                    //PostLogoutRedirectUris = {"https://localhost:5010/signout-callback-oidc" },
-                    ////redirects to information with permissions
-                    //RequireConsent = false,
-                    //AllowOfflineAccess = true,
-                    //// claim management
-                    //// AlwaysIncludeUserClaimsInIdToken = true,
-                    //AccessTokenLifetime =5,
-                    ////AbsoluteRefreshTokenLifetime = 30,
-                    
+                    AllowedCorsOrigins = { "https://localhost:5050" }                    
                 },
-                new Client()
-                {
-                    ClientId = "client_id_mvc",
-                    ClientSecrets = {new Secret("client_id_mvc".ToSha256()) },
-                    AllowedGrantTypes = GrantTypes.Code,
-
-                    AllowedScopes =
-                     {
-                         IdentityServerConstants.StandardScopes.OpenId,
-                         IdentityServerConstants.StandardScopes.Profile,
-                        // IdentityServerConstants.StandardScopes.Email,
-                        // IdentityServerConstants.StandardScopes.OfflineAccess,
-                         "apiServer",
-                        // "ClientMvc"
-                     },
-                    RedirectUris =  {"https://localhost:5010/signin-oidc"},
-                    PostLogoutRedirectUris = {"https://localhost:5010/signout-callback-oidc" },
-                    //redirects to information with permissions
-                    RequireConsent = false,
-                    AllowOfflineAccess = true,
-                    // claim management
-                    // AlwaysIncludeUserClaimsInIdToken = true,
-                    AccessTokenLifetime =5,
-                    //AbsoluteRefreshTokenLifetime = 30,
-                    
-
-                }
             };
     }
 }

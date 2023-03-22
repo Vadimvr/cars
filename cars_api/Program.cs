@@ -22,9 +22,6 @@ namespace cars_api
             builder.Services.AddSingleton<ICarRepository,CarRepositoryDrapper>();
 
 
-         
-            
-
             builder.Services.AddSwaggerGen(options =>
             {
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

@@ -8,7 +8,7 @@ namespace ConsoleApp1
     internal class Program
     {
 
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine("Start");
             var connectionString = "Host=localhost;Port=5432;Database=carsDb;Username=postgres;Password=3322";
@@ -38,22 +38,22 @@ namespace ConsoleApp1
             }
 
 
-            var allRecord = context.GetCars(1, int.MaxValue);
+            //var allRecord = context.GetCars(1, int.MaxValue);
 
-            foreach (var car in allRecord)
-            {
-                car.Description = $"{car.Description} Update";
-                context.UpdateAsync(car.Id, car);
-            }
+            //foreach (var car in allRecord)
+            //{
+            //    car.Description = $"{car.Description} Update";
+            //    context.UpdateAsync(car.Id, car);
+            //}
 
-            foreach (var car in allRecord)
-            {
-                context.Delete(car.Id);
-            }
+            //foreach (var car in allRecord)
+            //{
+            //    context.Delete(car.Id);
+            //}
 
 
-            Console.WriteLine("End");
-            Console.ReadKey();
+            //Console.WriteLine("End");
+            //Console.ReadKey();
 
         }
     }

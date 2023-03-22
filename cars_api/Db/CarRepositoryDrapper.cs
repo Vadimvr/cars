@@ -15,50 +15,69 @@ namespace cars_api.Db
             this.db = dbConnection;
         }
 
-        public async Task<IEnumerable<Car>> GetCarsAsync(int page = 1, int count = 100)
+        private readonly string sqlGetCars = $"SELECT * FROM \"Cars\" LIMIT @count OFFSET @offset";
+        public async Task<IEnumerable<Car>> GetAllCarsAsync(int page = 1, int count = 100)
         {
             if (page < 1 || count < 1)
                 throw new ArgumentException("page and count must be greater than 0");
-
-            return await db.QueryAsync<Car>($"SELECT * FROM \"Cars\" LIMIT {count} OFFSET {(page - 1) * count}");
+            var offset = (page - 1) * count;
+            return await db.QueryAsync<Car>(sqlGetCars, new { count, offset });
         }
-
-        public async Task<Car?> GetAsync(int id)
+        public IEnumerable<Car> GetAllCars(int page = 1, int count = 100)
         {
-            IEnumerable<Car> res = await db.QueryAsync<Car>("SELECT * FROM  \"Cars\" WHERE \"Id\" = @id", new { id });
-            return res.FirstOrDefault();
+            if (page < 1 || count < 1)
+                throw new ArgumentException("page and count must be greater than 0");
+            var offset = (page - 1) * count;
+            return db.Query<Car>(sqlGetCars, new { count, offset });
         }
 
+
+
+        private readonly string sqlQueryGetById = "SELECT * FROM  \"Cars\" WHERE \"Id\" = @idCar";
+        public async Task<Car?> GetAsync(Guid idCar)
+        {
+            return (await db.QueryAsync<Car>(sqlQueryGetById,new { idCar })).FirstOrDefault(); ;
+        }
+        public Car? Get(Guid idCar)
+        {
+            return db.QueryFirst<Car>(sqlQueryGetById, new { idCar });
+        }
+
+
+        private readonly string sqlQueryCreate = "INSERT INTO \"Cars\"( \"Name\", \"Description\", \"InnerInfo\", \"ProductionYear\") VALUES(@Name,@Description,@InnerInfo,@ProductionYear)";
         public async Task CreateAsync(Car car)
         {
-
-            var sqlQuery = "INSERT INTO \"Cars\" (\"Guid\",\"Name\", \"Description\",\"ProductionYear\") VALUES(@Guid,@Name,@Description,@ProductionYear)";
-            await db.ExecuteAsync(sqlQuery, car);
+            car.InnerInfo = "new innerInfo";
+            await db.ExecuteAsync(sqlQueryCreate, car);
+        }
+        public void Create(Car car)
+        {
+            db.Execute(sqlQueryCreate, car);
         }
 
-        public async Task UpdateAsync(int id, Car car)
-        {
 
-            var sqlQuery = "UPDATE  \"Cars\" SET \"Guid\" = @Guid,\"Name\" = @name, \"Description\" = @Description,\"ProductionYear\" = @ProductionYear" +
-                $" WHERE \"Id\" = {id}";
-            await db.ExecuteAsync(sqlQuery, car);
+        private readonly string sqlQueryUpdate = "UPDATE  \"Cars\" SET \"Name\" = @Name, \"Description\" = @Description,\"InnerInfo\" = @InnerInfo,\"ProductionYear\" = @ProductionYear WHERE \"Id\" = @Id";
+        public async Task UpdateAsync(Guid id1, Car car)
+        {
+            car.Id = id1;
+            await db.ExecuteAsync(sqlQueryUpdate, car);
+        }
+        public void Update(Guid id, Car car)
+        {
+            db.Execute(sqlQueryUpdate, car);
         }
 
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var sqlQuery = $"DELETE FROM \"Cars\" WHERE \"Id\" = {id}";
-            return 1 == await db.ExecuteAsync(sqlQuery, new { id }); ;
 
+        private readonly string sqlQueryDelete = $"DELETE FROM \"Cars\" WHERE \"Id\" = @id";
+        public async Task<bool> DeleteAsync(Guid id)
+        {
+            return 1 == await db.ExecuteAsync(sqlQueryDelete, new { id });
         }
-
-        public async Task<IEnumerable<Car>> GetCarsRangeAsync(int start, int end)
+        public bool Delete(Guid id)
         {
-            if (start > end)
-            {
-                (end, start) = (start, end);
-            }
-            return await db.QueryAsync<Car>($"SELECT * FROM \"Cars\" WHERE \"Id\" >= {start} AND  \"Id\" <={end}");
-
+            return 1 == db.Execute(sqlQueryDelete, new { id }); ;
         }
     }
 }
+
+

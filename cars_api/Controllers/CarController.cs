@@ -29,7 +29,7 @@ namespace cars_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<CarDTO>> Get(int id)
+        public async Task<ActionResult<CarDTO>> Get(Guid id)
         {
             var car = await carRepository.GetAsync(id);
 
@@ -54,30 +54,7 @@ namespace cars_api.Controllers
         {
             if (page < 1 || count_rows < 1)
                 return BadRequest();
-            return Ok((await carRepository.GetCarsAsync(page, count_rows)).Select(i=> (CarDTO)i));
-        }
-
-
-
-        /// <summary>
-        /// Getting a list of cars in the Id range
-        /// </summary>
-        /// <param name="start">Stat id</param>
-        /// <param name="end">End id</param>
-        /// <returns>List of cars</returns>
-        /// <response code="200">Success</response>
-        /// <response code="400">If IDs are less than 1.</response>
-        /// <response code="401">If the user is unauthorized</response>
-        [HttpPost("{start}/{end}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<IEnumerable<CarDTO>>> GetRange(int start, int end)
-        {
-            if (start < 1 || end < 1)
-                return BadRequest();
-            return Ok((await carRepository.GetCarsRangeAsync(start, end)).Select(i => (CarDTO)i));
-
+            return Ok((await carRepository.GetAllCarsAsync(page, count_rows)).Select(i=> (CarDTO)i));
         }
 
         /// <summary>
@@ -92,7 +69,7 @@ namespace cars_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Post([FromBody] CarDTO car)
+        public async Task<IActionResult> Post([FromBody] CarCrateDTO car)
         {
             if (car == null) return BadRequest();
             await carRepository.CreateAsync((Car)car);
@@ -113,13 +90,12 @@ namespace cars_api.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Put(int id, [FromBody] Car car)
+        public async Task<IActionResult> Put(Guid id, [FromBody] CarCrateDTO car)
         {
             if (car == null) return BadRequest();
-            var carOld = carRepository.GetAsync(id);
+            var carOld = await carRepository.GetAsync(id);
             if (carOld == null)
                 return NotFound();
-
             await carRepository.UpdateAsync(id, car);
             return Ok();
         }
@@ -137,7 +113,7 @@ namespace cars_api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var carIsDeleted = await carRepository.DeleteAsync(id);
 
