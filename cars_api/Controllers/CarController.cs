@@ -54,7 +54,7 @@ namespace cars_api.Controllers
         {
             if (page < 1 || count_rows < 1)
                 return BadRequest();
-            return Ok((await carRepository.GetAllCarsAsync(page, count_rows)).Select(i=> (CarDTO)i));
+            return Ok((await carRepository.GetAllCarsAsync(page, count_rows)).Select(i => (CarDTO)i));
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace cars_api.Controllers
             var carOld = await carRepository.GetAsync(id);
             if (carOld == null)
                 return NotFound();
-            await carRepository.UpdateAsync(id, car);
+            await carRepository.UpdateAsync(id, (Car)car);
             return Ok();
         }
 

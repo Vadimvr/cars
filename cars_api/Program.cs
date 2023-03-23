@@ -1,8 +1,5 @@
 using cars_api.Db;
-using IdentityModel;
 using IdentityServer4.AccessTokenValidation;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Npgsql;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -18,8 +15,8 @@ namespace cars_api
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddTransient<IDbConnection>((sp) => new NpgsqlConnection(builder.Configuration.GetConnectionString("NpgConnectionStrings")));
-
-            builder.Services.AddSingleton<ICarRepository,CarRepositoryDrapper>();
+            builder.Services.AddSingleton<IDbInitializer, DbInitializer>();
+            builder.Services.AddSingleton<ICarRepository, CarRepositoryDrapper>();
 
 
             builder.Services.AddSwaggerGen(options =>
@@ -62,8 +59,8 @@ namespace cars_api
                             Scheme = "oauth2",
                             Name = "Bearer",
                             In = ParameterLocation.Header,
-                           
-                           
+
+
                         },
                         new List<string>()
                     }
@@ -93,6 +90,7 @@ namespace cars_api
 
             var app = builder.Build();
 
+            app.Services.GetService<IDbInitializer>()?.Initialize();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {

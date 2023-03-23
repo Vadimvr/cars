@@ -1,7 +1,5 @@
 ﻿using identity_server.Services;
-using IdentityModel;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 
 namespace identity_server.Data
 {
@@ -10,6 +8,8 @@ namespace identity_server.Data
         public static void Init(IServiceProvider scopeServiceProvider)
         {
             var userManager = scopeServiceProvider.GetService<UserManager<IdentityUser>>();
+
+            if (userManager == null) throw new ArgumentNullException(nameof(userManager), "userManager is null!");
 
             foreach (var item in Configuration.TestUser)
             {
@@ -28,8 +28,6 @@ namespace identity_server.Data
                     }
                 }
             }
-
-
         }
     }
 }
