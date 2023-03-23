@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cars_api", "cars_api\cars_a
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "identity_server", "identity_server\identity_server.csproj", "{F01E01E7-7CC6-4291-86D3-3E8055ACF676}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{1D16E75D-4ED0-4B0D-8987-BA30B6768E61}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{F01E01E7-7CC6-4291-86D3-3E8055ACF676}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F01E01E7-7CC6-4291-86D3-3E8055ACF676}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F01E01E7-7CC6-4291-86D3-3E8055ACF676}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1D16E75D-4ED0-4B0D-8987-BA30B6768E61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1D16E75D-4ED0-4B0D-8987-BA30B6768E61}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1D16E75D-4ED0-4B0D-8987-BA30B6768E61}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1D16E75D-4ED0-4B0D-8987-BA30B6768E61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
